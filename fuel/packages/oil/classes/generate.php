@@ -1780,7 +1780,16 @@ CLASS;
 				$migrations[] = $file->getPathname();
 			}
 			sort($migrations);
-			list($last) = explode('_', basename(end($migrations)));
+			
+			if (empty($migrations))
+			{
+				$last = 0;
+			}
+			else
+			{
+				list($last) = explode('_', basename(end($migrations)));
+				$last = (int) $last;
+			}
 		}
 		catch (\LogicException $e)
 		{

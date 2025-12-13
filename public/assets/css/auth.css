@@ -1,0 +1,127 @@
+/* --- auth.css --- */
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* カードデザイン */
+.auth-card {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+/* Recommender タイトル [cite: 1, 7] */
+.app-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+/* LOGIN / SIGN UP サブタイトル [cite: 2, 8] */
+.page-subtitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 入力エリア */
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* 入力欄（下線のみ） */
+.form-input {
+    width: 100%;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    border-radius: 0;
+}
+
+.form-input:focus {
+    border-bottom: 1px solid #777;
+}
+
+/* ボタンエリア */
+.submit-area {
+    margin-top: 40px;
+}
+
+/* グレーのボタン [cite: 5, 11] */
+.submit-btn {
+    background-color: #999;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 0;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #777;
+}
+
+/* リンク [cite: 6] */
+.auth-link {
+    display: block;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #333;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+/* エラーメッセージ */
+.error-msg {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+.alert-error {
+    background-color: #ffe6e6;
+    color: #d8000c;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    border-radius: 4px;
+    text-align: left;
+}
