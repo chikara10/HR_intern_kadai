@@ -1,0 +1,188 @@
+/* 共通スタイル */
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+header {
+    background-color: #f9f9f9;
+    padding: 15px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+}
+
+.app-title {
+    margin: 0;
+    width: 200px;
+}
+
+/* 検索フォーム */
+.search-container {
+    display: flex;
+    gap: 10px;
+    height: 30px;
+    margin: auto 10px auto 0px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.search-btn img {
+    width: 15px;
+    height: 15px;
+}
+
+/* フィルター（横スクロール） */
+.filter-scroll {
+    display: flex;
+    overflow-x: auto;
+    padding: 15px 20px;
+    gap: 10px;
+    background-color: #fff;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+    margin: 0px 30px 0 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    /* スクロールバーを隠す工夫 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.filter-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    color: #666;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.filter-btn.active {
+    background-color: #333; /* 選択中は黒 */
+    color: #fff;
+}
+
+/* メインリスト */
+.place-list {
+    padding: 20px 40px 20px 40px;
+    padding-bottom: 80px; /* +ボタンとかぶらないように */
+}
+
+.place-card {
+    display: block; /* リンク全体をクリック可能に */
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.place-info {
+    flex: 1;
+}
+
+.place-genre {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.place-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 80%;
+}
+
+.place-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 予約ステータスのバッジ */
+.status-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* PDFのイメージに合わせた色分け */
+.status-ok { color: #d9534f; border-color: #d9534f; background: #fff5f5; } /* 予約可 */
+.status-free { color: #5bc0de; border-color: #5bc0de; background: #f0fbff; } /* 予約不要 */
+.status-ng { color: #777; border-color: #777; background: #f9f9f9; } /* 予約不可 */
+.status-hard { color: #f0ad4e; border-color: #f0ad4e; background: #fffcf0; } /* 予約難 */
+
+
+/* 右下の＋ボタン (FAB) */
+.fab-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    font-size: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-decoration: none;
+    z-index: 200;
+    display: flex;       /* 文字位置の微調整 */
+    justify-content: center;
+    align-items: center;
+}
+
+.fab-btn:hover {
+    background-color: #555;
+}
+
+/* ひとこと（note）の表示（省略表示） */
+.place-note {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}

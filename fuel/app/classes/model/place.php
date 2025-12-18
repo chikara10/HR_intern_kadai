@@ -39,4 +39,14 @@ class Model_Place extends \Orm\Model
 
 	protected static $_table_name = 'places';
 
+	protected static $_belongs_to = array(
+        'genre' => array(
+            'key_from' => 'genre_id',
+            'model_to' => 'Model_Genre',
+            'key_to' => 'id',
+            'cascade_save' => false,
+            'cascade_delete' => false,
+        )
+    );
+
 }

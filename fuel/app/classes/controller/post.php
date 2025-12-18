@@ -3,7 +3,7 @@
 class Controller_Post extends Controller
 {
 
-    /* // ログインの有無確認
+    // ログインの有無確認
     public function before()
     {
         parent::before();
@@ -12,7 +12,7 @@ class Controller_Post extends Controller
             // ログインしていなければ、ログインページへ強制リダイレクト
             \Response::redirect('login');
         }
-    } */
+    }
 
     public function action_index()
     {
@@ -52,7 +52,7 @@ class Controller_Post extends Controller
                     // 登録成功
                     \Session::set_flash('success', '投稿に成功しました。');
                     // 一覧ページへリダイレクト
-                    \Response::redirect('recommender/index');
+                    \Response::redirect('index');
                 } else {
                     // 登録失敗
                     \Session::set_flash('error', '投稿に失敗しました。');

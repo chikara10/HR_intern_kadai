@@ -3,123 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿</title>
+    <title>Recommender - 投稿</title>
     <?php echo Asset::css('post.css'); ?>
 </head>
 <body>
 
-<?php
-    // コントローラーから送られてきたエラー配列（$val->error()の中身）を取得
-    // エラーがない場合は空の配列 [] をセット
-    $errors = Session::get_flash('error', []);
-?>
+    <header>
+        <h1 class="app-title">Recommender</h1>
+    </header>
 
-<div class="container">
-    <h1 class="page-title">Recommender</h1>
+    <div class="container">
+        <?php if (Session::get_flash('error')): ?>
+            <div class="alert alert-error">
+                <?php echo implode('<br>', (array) Session::get_flash('error')); ?>
+            </div>
+        <?php endif; ?>
 
-    <div class="form-card">
-        <?php echo Form::open(array('action' => Uri::current(), 'method' => 'post')); ?>
+        <form action="" method="post" class="post-form">
 
             <div class="form-group">
-                <label>店舗名/場所名 <span class="required-mark">※</span>
-                    <?php if (isset($errors['name'])): ?>
-                        <span class="error-msg"><?php echo $errors['name']; ?></span>
-                    <?php endif; ?>
-            </label>
-                <input type="text" name="name" placeholder="店舗名/場所名を入力" value="<?php echo Input::post('name'); ?>">
+                <label for="place-input">店舗名/場所名 <span class="required">※</span></label>
+                <input type="text" id="place-input" name="name" 
+                       placeholder="店舗名/場所名を入力" 
+                       class="form-control"
+                       value="<?php echo Input::post('name'); ?>" autocomplete="off">
+                
+                <input type="hidden" id="place_id" name="place_id" value="<?php echo Input::post('place_id'); ?>">
             </div>
 
             <div class="form-group">
-                <label>ジャンル <span class="required-mark">※</span>
-                    <?php if (isset($errors['genre_id'])): ?>
-                        <span class="error-msg"><?php echo $errors['genre_id']; ?></span>
-                    <?php endif; ?></label>
-                <select name="genre_id">
-                    <option value="" disabled selected>ジャンルを選択</option>
-                    <?php if (isset($genres)): ?>
+                <label>ジャンル <span class="required">※</span></label>
+                <div class="select-wrapper">
+                    <select name="genre_id" class="form-control">
+                        <option value="" disabled selected>ジャンルを選択</option>
                         <?php foreach ($genres as $genre): ?>
-                            <option value="<?php echo $genre->id; ?>" <?php echo (Input::post('genre_id') == $genre->id) ? 'selected' : ''; ?>>
+                            <option value="<?php echo $genre->id; ?>" 
+                                <?php echo (Input::post('genre_id') == $genre->id) ? 'selected' : ''; ?>>
                                 <?php echo $genre->name; ?>
                             </option>
                         <?php endforeach; ?>
-                    <?php endif; ?>
-                </select>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
-                <label>予約 <span class="required-mark">※</span>
-                <?php if (isset($errors['reservable'])): ?>
-                        <span class="error-msg"><?php echo $errors['reservable']; ?></span>
-                <?php endif; ?></label>
+                <label>予約 <span class="required">※</span></label>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input type="radio" name="reservable" value="0" <?php echo (Input::post('reservable') == '0') ? 'checked' : ''; ?>> 予約可
+                    <label class="radio-item">
+                        <input type="radio" name="reservable" value="0" <?php echo (Input::post('reservable') == '0') ? 'checked' : ''; ?>>
+                        <span class="radio-text">◎予約可</span>
                     </label>
-                    <label class="radio-label">
-                        <input type="radio" name="reservable" value="1" <?php echo (Input::post('reservable') == '1') ? 'checked' : ''; ?>> 予約不要
+                    <label class="radio-item">
+                        <input type="radio" name="reservable" value="1" <?php echo (Input::post('reservable') == '1') ? 'checked' : ''; ?>>
+                        <span class="radio-text">予約不要</span>
                     </label>
-                    <label class="radio-label">
-                        <input type="radio" name="reservable" value="2" <?php echo (Input::post('reservable') == '2') ? 'checked' : ''; ?>> 予約不可
+                    <label class="radio-item">
+                        <input type="radio" name="reservable" value="2" <?php echo (Input::post('reservable') == '2') ? 'checked' : ''; ?>>
+                        <span class="radio-text">予約不可</span>
                     </label>
-                    <label class="radio-label">
-                        <input type="radio" name="reservable" value="3" <?php echo (Input::post('reservable') == '3') ? 'checked' : ''; ?>> 予約難
+                    <label class="radio-item">
+                        <input type="radio" name="reservable" value="3" <?php echo (Input::post('reservable') == '3') ? 'checked' : ''; ?>>
+                        <span class="radio-text">予約難</span>
                     </label>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>住所 <span class="required-mark">※</span>
-                <?php if (isset($errors['address'])): ?>
-                        <span class="error-msg"><?php echo $errors['address']; ?></span>
-                <?php endif; ?></label>
-                <input type="text" name="address" placeholder="住所を入力" value="<?php echo Input::post('address'); ?>">
+                <label for="address">住所 <span class="required">※</span></label>
+                <input type="text" id="address" name="address" 
+                       placeholder="住所を入力" 
+                       class="form-control"
+                       value="<?php echo Input::post('address'); ?>">
             </div>
 
             <div class="form-group">
-                <label>電話番号 <span class="required-mark">※</span>
-                    <?php if (isset($errors['phone_number'])): ?>
-                        <span class="error-msg"><?php echo $errors['phone_number']; ?></span>
-                    <?php endif; ?>
-                </label>
-                <input type="tel" name="phone_number" placeholder="電話番号を入力" value="<?php echo Input::post('phone_number'); ?>">
+                <label for="phone_number">電話番号 <span class="required">※</span></label>
+                <input type="text" id="phone_number" name="phone_number" 
+                       placeholder="電話番号を入力" 
+                       class="form-control"
+                       value="<?php echo Input::post('phone_number'); ?>">
             </div>
 
             <div class="form-group">
                 <label>定休日</label>
-                <div class="checkbox-group">
-                    <label class="checkbox-label"><input type="checkbox" name="closing_sun" value="1" <?php echo Input::post('closing_sun') ? 'checked' : ''; ?>> 日</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_mon" value="1" <?php echo Input::post('closing_mon') ? 'checked' : ''; ?>> 月</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_tue" value="1" <?php echo Input::post('closing_tue') ? 'checked' : ''; ?>> 火</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_wed" value="1" <?php echo Input::post('closing_wed') ? 'checked' : ''; ?>> 水</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_thu" value="1" <?php echo Input::post('closing_thu') ? 'checked' : ''; ?>> 木</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_fri" value="1" <?php echo Input::post('closing_fri') ? 'checked' : ''; ?>> 金</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_sat" value="1" <?php echo Input::post('closing_sat') ? 'checked' : ''; ?>> 土</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_hol" value="1" <?php echo Input::post('closing_hol') ? 'checked' : ''; ?>> 祝</label>
-                    <label class="checkbox-label"><input type="checkbox" name="closing_irregular" value="1" <?php echo Input::post('closing_irregular') ? 'checked' : ''; ?>> 不定休</label>
+                <div class="checkbox-grid">
+                    <?php 
+                    $days = [
+                        'closing_sun' => '日', 'closing_mon' => '月', 'closing_tue' => '火', 'closing_wed' => '水',
+                        'closing_thu' => '木', 'closing_fri' => '金', 'closing_sat' => '土',
+                        'closing_hol' => '祝', 'closing_irregular' => '不定休'
+                    ];
+                    foreach ($days as $key => $label): 
+                    ?>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="<?php echo $key; ?>" value="1" 
+                                <?php echo (Input::post($key)) ? 'checked' : ''; ?>>
+                            <span class="checkbox-text"><?php echo $label; ?></span>
+                        </label>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>ホームページ
-                    <?php if (isset($errors['website_url'])): ?>
-                        <span class="error-msg"><?php echo $errors['website_url']; ?></span>
-                    <?php endif; ?>
-                </label>
-                <input type="text" name="website_url" placeholder="URLを入力" value="<?php echo Input::post('website_url'); ?>">
+                <label for="website_url">ホームページ</label>
+                <input type="url" id="website_url" name="website_url" 
+                       placeholder="URLを入力" 
+                       class="form-control"
+                       value="<?php echo Input::post('website_url'); ?>">
             </div>
 
             <div class="form-group">
-                <label>ひとこと</label>
-                <textarea name="note" rows="3" placeholder="ひとことを入力"><?php echo Input::post('note'); ?></textarea>
+                <label for="note">ひとこと</label>
+                <textarea id="note" name="note" rows="4" 
+                          placeholder="ひとことを入力" 
+                          class="form-control"><?php echo Input::post('note'); ?></textarea>
             </div>
 
-            <div class="submit-area">
+            <div class="form-footer">
                 <button type="submit" class="submit-btn">投稿する</button>
             </div>
 
-        <?php echo Form::close(); ?>
+        </form>
     </div>
-</div>
 
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-nfAbhs2a2motzMwpLRM_KBWCqqHJXFg&libraries=places&callback=initAutocomplete&language=ja">
+    </script>
+
+    <script>
+        function initAutocomplete() {
+            // 入力フィールドを取得
+            const input = document.getElementById("place-input");
+            
+            // Autocompleteの初期化
+            const autocomplete = new google.maps.places.Autocomplete(input, {
+                fields: ["place_id", "name", "formatted_address", "formatted_phone_number", "website"],
+                componentRestrictions: { country: "jp" }, // 日本国内に限定
+            });
+
+            // 場所が選択されたときのイベントリスナー
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+
+                // 1. 店舗名の上書き (place.name)
+                if (place.name) {
+                    input.value = place.name;
+                }
+
+                // 2. Place ID (place.place_id) -> 隠しフィールドへ
+                if (place.place_id) {
+                    document.getElementById("place_id").value = place.place_id;
+                }
+
+                // 3. 住所 (place.formatted_address) -> 自動入力
+                if (place.formatted_address) {
+                    // "日本、〒000-0000 "のようなプレフィックスを取り除く簡易処理
+                    let address = place.formatted_address.replace(/^日本、/, '');
+                    document.getElementById("address").value = address;
+                }
+
+                // 4. 電話番号 (place.formatted_phone_number) -> 自動入力
+                if (place.formatted_phone_number) {
+                    document.getElementById("phone_number").value = place.formatted_phone_number;
+                }
+
+                // 5. ウェブサイト (place.website) -> 自動入力
+                if (place.website) {
+                    document.getElementById("website_url").value = place.website;
+                }
+            });
+        }
+    </script>
 </body>
 </html>

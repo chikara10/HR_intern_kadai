@@ -6,7 +6,7 @@ class Controller_Signup extends Controller
     {
         // 既にログイン済みならトップへ
         if (Auth::check()) {
-            Response::redirect('recommender/index');
+            Response::redirect('index');
         }
 
         $view = View::forge('recommender/signup');
@@ -32,16 +32,20 @@ class Controller_Signup extends Controller
             
             if ($val->run()) {
                 try {
+                    //今回はemailを認証で使わないのでダミーメールアドレス作成
+                    $dummy_email = Input::post('username') . '@dummy.com';
+
                     // ユーザー作成 (ユーザー名, パスワード)
                     $created = Auth::create_user(
                         Input::post('username'),
                         Input::post('password'),
+                        $dummy_email
                     );
 
                     if ($created) {
                         // 作成成功したらそのままログインさせる
                         Auth::login(Input::post('username'), Input::post('password'));
-                        Response::redirect('recommender/index');
+                        Response::redirect('index');
                     }
                 } catch (\SimpleUserUpdateException $e) {
                     // ユーザー名重複などのエラー

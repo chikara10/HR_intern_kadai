@@ -20,7 +20,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="<?php echo Uri::create('auth/login'); ?>" method="post">
+        <form action="<?php echo Uri::create('login'); ?>" method="post">
             <?php echo Form::csrf(); ?>
 
             <div class="form-group">
@@ -38,7 +38,7 @@
             </div>
         </form>
 
-        <a href="<?php echo Uri::create('auth/signup'); ?>" class="auth-link">
+        <a href="<?php echo Uri::create('signup'); ?>" class="auth-link">
             サインアップはこちらから →
         </a>
     </div>
