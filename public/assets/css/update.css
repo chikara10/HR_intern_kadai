@@ -1,0 +1,193 @@
+/* 共通スタイル */
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+header {
+    background-color: #f9f9f9;
+    padding: 15px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+}
+
+.app-title {
+    margin: 0;
+    width: 200px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* フォーム全体 */
+.post-form {
+    padding: 20px 40px;
+    margin: 0 30px;
+}
+
+.form-group {
+    margin-top: 25px;
+    border-bottom: 1px solid #eee;
+}
+
+/* ラベル */
+label {
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* 必須マーク */
+.required {
+    color: #d9534f;
+    font-size: 12px;
+    margin-left: 4px;
+    vertical-align: text-bottom;
+}
+
+/* 入力フィールド共通 */
+.form-control {
+    width: 100%;
+    font-size: 23px;
+    appearance: none; /* iOS等のデフォルトスタイル解除 */
+    margin-bottom: 10px;
+    border: none;
+}
+
+/* plcaholder色変更 */
+::placeholder {
+  color: #a2a2a2;
+}
+/* 旧Edge対応 */
+::-ms-input-placeholder {
+  color: #a2a2a2;
+}
+/* IE対応 */
+:-ms-input-placeholder {
+  color: #a2a2a2;
+}
+
+.genre-select {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.genre-select option {
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #333;
+    background-color: #fff;
+    outline: none;
+}
+
+/* セレクトボックスの矢印調整 */
+.select-wrapper {
+    position: relative;
+}
+.select-wrapper::after {
+    content: '▼';
+    font-size: 10px;
+    color: #888;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* ラジオボタン（予約）のスタイル */
+.radio-group {
+    display: flex;
+    gap: 12px;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: normal; /* ラベルのボールドを解除 */
+}
+
+.radio-item input[type="radio"] {
+    margin: 0 10px 0 5px;
+    transform: scale(1.2); /* ラジオボタンを少し大きく */
+}
+
+/* チェックボックス（定休日）のグリッド配置 */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4列で表示 */
+    gap: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    background-color: #f5f5f5;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+/* 送信ボタンエリア */
+.form-footer {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.submit-btn {
+    width: 35%;
+    padding: 15px;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #555;
+}
+
+/* エラーメッセージ */
+.alert-error {
+    background-color: #fce4e4;
+    border: 1px solid #fcc2c3;
+    color: #cc0033;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.error-msg {
+    color: #cc0033;
+    font-size: 13px;
+    margin-top: 5px;
+    
+}

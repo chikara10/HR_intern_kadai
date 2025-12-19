@@ -77,34 +77,40 @@ class Controller_Post extends Controller
         //場所の名前
         $val->add('name', '場所の名前')
             ->add_rule('required')
-            ->add_rule('max_length', 50);
+            ->add_rule('max_length', 50)
+            ->set_error_message('required', '場所の名前は必須です。');
 
         //place_id
         $val->add('place_id', 'GMAP_ID')
             ->add_rule('required')
-            ->add_rule('max_length', 100);
+            ->add_rule('max_length', 100)
+            ->set_error_message('required', '候補から選んでください。');
 
         //ジャンルid
         $val->add('genre_id', 'ジャンル')
             ->add_rule('required')
-            ->add_rule('valid_string', array('numeric'));
+            ->add_rule('valid_string', array('numeric'))
+            ->set_error_message('required', 'ジャンルは必須です。');
 
         //予約可否
         $val->add('reservable', '予約可否')
             ->add_rule('required')
             ->add_rule('valid_string', array('numeric'))
             ->add_rule('numeric_min', 0)
-            ->add_rule('numeric_max', 3);
+            ->add_rule('numeric_max', 3)
+            ->set_error_message('required', '予約の可否は必須です。');
 
         //住所
         $val->add('address', '住所')
-            ->add_rule('required');
+            ->add_rule('required')
+            ->set_error_message('required', '住所は必須です。');
 
         //電話番号
         $val->add('phone_number', '電話番号')
             ->add_rule('required')
             ->add_rule('max_length', 30)
-            ->add_rule('match_pattern', '/^[0-9-]+$/');
+            ->add_rule('match_pattern', '/^[0-9-]+$/')
+            ->set_error_message('required', '電話番号は必須です。');
 
 
         //ホームページURL
@@ -112,7 +118,6 @@ class Controller_Post extends Controller
             ->add_rule('valid_url');
 
         //エラーメッセージ内容
-        $val->set_message('required', ':label は必須です。');
         $val->set_message('max_length', ':label は :param:1 文字以内で入力してください。');
         $val->set_message('valid_url', '正しいURLの形式で入力してください（http...）。');
         $val->set_message('match_pattern', '電話番号は半角数字とハイフンのみで入力してください。');

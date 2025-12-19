@@ -9,22 +9,44 @@
 <body>
 
     <header>
-        <h1 class="app-title">Recommender</h1>
+        <a href="<?php echo Uri::create('index'); ?>">
+            <?php echo Asset::img('main-icon.png', [
+                'class' => 'app-title',
+                'alt'   => 'Recommender'
+            ]);?>
+        </a>
     </header>
 
     <div class="container">
-        <?php if (Session::get_flash('error')): ?>
-            <div class="alert alert-error">
-                <?php echo implode('<br>', (array) Session::get_flash('error')); ?>
+        <?php 
+            $errors = Session::get_flash('error', []); 
+        ?>
+
+        <?php if ($errors): ?>
+            <div class="alert-error">
+                入力内容に不備があります。各項目を確認してください。
             </div>
         <?php endif; ?>
 
         <form action="" method="post" class="post-form">
 
             <div class="form-group">
-                <label for="place-input">店舗名/場所名 <span class="required">※</span></label>
+                <label for="place-input">店舗名/場所名 <span class="required">※</span>
+                    <?php if (isset($errors['name'])): ?>
+                        <span class="error-msg">
+                            <?php echo $errors['name']; ?>
+                        </span>
+                    <?php endif; ?>
+
+                    <?php if (isset($errors['place_id'])): ?>
+                        <span class="error-msg">
+                            <?php echo $errors['place_id']; ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+
                 <input type="text" id="place-input" name="name" 
-                       placeholder="店舗名/場所名を入力" 
+                       placeholder="店舗名/場所名(候補から選択)" 
                        class="form-control"
                        value="<?php echo Input::post('name'); ?>" autocomplete="off">
                 
@@ -32,9 +54,16 @@
             </div>
 
             <div class="form-group">
-                <label>ジャンル <span class="required">※</span></label>
+                <label>ジャンル <span class="required">※</span>
+                    <?php if (isset($errors['genre_id'])): ?>
+                        <span class="error-msg">
+                            <?php echo $errors['genre_id']; ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+
                 <div class="select-wrapper">
-                    <select name="genre_id" class="form-control">
+                    <select name="genre_id" class="form-control genre-select">
                         <option value="" disabled selected>ジャンルを選択</option>
                         <?php foreach ($genres as $genre): ?>
                             <option value="<?php echo $genre->id; ?>" 
@@ -47,11 +76,18 @@
             </div>
 
             <div class="form-group">
-                <label>予約 <span class="required">※</span></label>
+                <label>予約 <span class="required">※</span>
+                    <?php if (isset($errors['reservable'])): ?>
+                        <span class="error-msg">
+                            <?php echo $errors['reservable']; ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+
                 <div class="radio-group">
                     <label class="radio-item">
                         <input type="radio" name="reservable" value="0" <?php echo (Input::post('reservable') == '0') ? 'checked' : ''; ?>>
-                        <span class="radio-text">◎予約可</span>
+                        <span class="radio-text">予約可</span>
                     </label>
                     <label class="radio-item">
                         <input type="radio" name="reservable" value="1" <?php echo (Input::post('reservable') == '1') ? 'checked' : ''; ?>>
@@ -69,7 +105,14 @@
             </div>
 
             <div class="form-group">
-                <label for="address">住所 <span class="required">※</span></label>
+                <label for="address">住所 <span class="required">※</span>
+                    <?php if (isset($errors['address'])): ?>
+                        <span class="error-msg">
+                            <?php echo $errors['address']; ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+
                 <input type="text" id="address" name="address" 
                        placeholder="住所を入力" 
                        class="form-control"
@@ -77,7 +120,14 @@
             </div>
 
             <div class="form-group">
-                <label for="phone_number">電話番号 <span class="required">※</span></label>
+                <label for="phone_number">電話番号 <span class="required">※</span>
+                    <?php if (isset($errors['phone_number'])): ?>
+                        <span class="error-msg">
+                            <?php echo $errors['phone_number']; ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+
                 <input type="text" id="phone_number" name="phone_number" 
                        placeholder="電話番号を入力" 
                        class="form-control"
@@ -126,15 +176,21 @@
         </form>
     </div>
 
-    <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-nfAbhs2a2motzMwpLRM_KBWCqqHJXFg&libraries=places&callback=initAutocomplete&language=ja">
-    </script>
+    
 
     <script>
-        function initAutocomplete() {
+        window.initAutocomplete = function() {
             // 入力フィールドを取得
             const input = document.getElementById("place-input");
+            if (!input) return;
             
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // 送信をキャンセル
+                    return false;
+                }
+            });
+
             // Autocompleteの初期化
             const autocomplete = new google.maps.places.Autocomplete(input, {
                 fields: ["place_id", "name", "formatted_address", "formatted_phone_number", "website"],
@@ -173,6 +229,10 @@
                 }
             });
         }
+    </script>
+
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-nfAbhs2a2motzMwpLRM_KBWCqqHJXFg&libraries=places&callback=initAutocomplete&language=ja">
     </script>
 </body>
 </html>

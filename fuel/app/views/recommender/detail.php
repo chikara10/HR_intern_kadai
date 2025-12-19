@@ -23,10 +23,12 @@
         <div class="header-area">
             <h1 class="place-name"><?php echo e($place->name); ?></h1>
             <div class="header-area-icons">
-                <?php echo Asset::img('update-icon.svg', [
-                    'class' => 'update-icon',
-                    'alt'   => 'update'
-                ]);?>
+                <a href="<?php echo Uri::create('update/index/' . $place->id); ?>">
+                    <?php echo Asset::img('update-icon.svg', [
+                        'class' => 'update-icon',
+                        'alt'   => 'update'
+                    ]);?>
+                </a>
                 <?php echo Asset::img('delete-icon.svg', [
                     'class' => 'delete-icon',
                     'alt'   => 'delete'

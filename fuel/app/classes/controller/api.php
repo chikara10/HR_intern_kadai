@@ -47,4 +47,21 @@ class Controller_Api extends Controller_Rest
         // JSONを返す
         return $this->response($result);
     }
+
+    // 指定されたIDのお店の情報を返すAPI (編集画面用)
+    public function get_place($id = null)
+    {
+        if (!$id) {
+            return $this->response(array('error' => 'IDが必要です'), 400);
+        }
+
+        $place = Model_Place::find($id);
+
+        if (!$place) {
+            return $this->response(array('error' => 'データが見つかりません'), 404);
+        }
+
+        // JSON形式で返す
+        return $this->response($place->to_array());
+    }
 }

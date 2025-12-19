@@ -81,10 +81,12 @@ header {
 
 .update-icon {
     width: 34px;
+    cursor: pointer;
 }
 
 .delete-icon {
     width: 30px;
+    cursor: pointer;
 }
 
 .place-name {
