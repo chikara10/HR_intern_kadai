@@ -39,7 +39,7 @@ class Controller_Update extends Controller
             $val->add('place_id', 'GMAP_ID')
                 ->add_rule('required')
                 ->add_rule('max_length', 100)
-                ->set_error_message('required', '候補から選んでください。');
+                ->set_error_message('required', '検索候補から選んでください。');
 
             //ジャンルid
             $val->add('genre_id', 'ジャンル')
@@ -79,32 +79,47 @@ class Controller_Update extends Controller
 
             // バリデーションを実行
             if ($val->run()) {
-                // データの更新
-                $place->name = Input::post('name');
-                $place->place_id = Input::post('place_id');
-                $place->genre_id = Input::post('genre_id');
-                $place->reservable = Input::post('reservable');
-                $place->address = Input::post('address');
-                $place->phone_number = Input::post('phone_number');
-                $place->website_url = Input::post('website_url');
-                $place->note = Input::post('note');
 
-                // 定休日 (チェックがない場合は0になるように処理)
-                $place->closing_sun = Input::post('closing_sun', 0) ? 1 : 0;
-                $place->closing_mon = Input::post('closing_mon', 0) ? 1 : 0;
-                $place->closing_tue = Input::post('closing_tue', 0) ? 1 : 0;
-                $place->closing_wed = Input::post('closing_wed', 0) ? 1 : 0;
-                $place->closing_thu = Input::post('closing_thu', 0) ? 1 : 0;
-                $place->closing_fri = Input::post('closing_fri', 0) ? 1 : 0;
-                $place->closing_sat = Input::post('closing_sat', 0) ? 1 : 0;
-                $place->closing_hol = Input::post('closing_hol', 0) ? 1 : 0;
-                $place->closing_irregular = Input::post('closing_irregular', 0) ? 1 : 0;
+                //入力されたplace_idが既に登録されているか確認
+                $input_place_id = \Input::post('place_id');
+                
+                // Model_Placeを使ってデータベースを検索
+                $existing_place = Model_Place::query()
+                    ->where('place_id', $input_place_id)
+                    ->where('id', '!=', $id) // 自分自身は除外
+                    ->get_one(); // 1件だけ取得
 
-                if ($place->save()) {
-                    Session::set_flash('success', '情報を更新しました。');
-                    Response::redirect('detail/index/' . $id);
+                if ($existing_place) {
+                    \Session::set_flash('error', 'その場所はすでに登録されています。');
                 } else {
-                    Session::set_flash('error', '更新に失敗しました。');
+
+                    // データの更新
+                    $place->name = Input::post('name');
+                    $place->place_id = Input::post('place_id');
+                    $place->genre_id = Input::post('genre_id');
+                    $place->reservable = Input::post('reservable');
+                    $place->address = Input::post('address');
+                    $place->phone_number = Input::post('phone_number');
+                    $place->website_url = Input::post('website_url');
+                    $place->note = Input::post('note');
+
+                    // 定休日 (チェックがない場合は0になるように処理)
+                    $place->closing_sun = Input::post('closing_sun', 0) ? 1 : 0;
+                    $place->closing_mon = Input::post('closing_mon', 0) ? 1 : 0;
+                    $place->closing_tue = Input::post('closing_tue', 0) ? 1 : 0;
+                    $place->closing_wed = Input::post('closing_wed', 0) ? 1 : 0;
+                    $place->closing_thu = Input::post('closing_thu', 0) ? 1 : 0;
+                    $place->closing_fri = Input::post('closing_fri', 0) ? 1 : 0;
+                    $place->closing_sat = Input::post('closing_sat', 0) ? 1 : 0;
+                    $place->closing_hol = Input::post('closing_hol', 0) ? 1 : 0;
+                    $place->closing_irregular = Input::post('closing_irregular', 0) ? 1 : 0;
+
+                    if ($place->save()) {
+                        Session::set_flash('success', '情報を更新しました。');
+                        Response::redirect('detail/index/' . $id);
+                    } else {
+                        Session::set_flash('error', '更新に失敗しました。');
+                    }
                 }
             } else {
                 Session::set_flash('error', $val->error());

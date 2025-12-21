@@ -4,22 +4,19 @@ class Controller_Detail extends Controller
 {
     public function action_index($id = null)
     {
-        // IDが指定されていない、または見つからない場合は一覧へ戻す（簡易的なエラー処理）
         if ($id === null) {
             Response::redirect('index');
         }
 
-        // IDを元にデータベースから1件取得
         $place = Model_Place::find($id);
 
-        // データが存在しない場合も一覧へ
         if (!$place) {
             Response::redirect('index');
         }
 
         $data['place'] = $place;
 
-        // 定休日の表示用ロジック（Viewで書くと長くなるのでここで整理）
+        // 定休日の表示用文字列を作成
         $closed_days = [];
         if ($place->closing_sun) $closed_days[] = '日';
         if ($place->closing_mon) $closed_days[] = '月';

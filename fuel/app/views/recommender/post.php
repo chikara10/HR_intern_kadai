@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommender - 投稿</title>
+    <title>Recommender-投稿</title>
     <?php echo Asset::css('post.css'); ?>
 </head>
 <body>
@@ -182,8 +182,6 @@
         </form>
     </div>
 
-    
-
     <script>
         window.initAutocomplete = function() {
             // 入力フィールドを取得
@@ -235,6 +233,11 @@
                 }
             });
         }
+
+        //既に登録されている場合のアラート表示
+        <?php if ($error_msg = Session::get_flash('error')): ?>
+            window.alert("<?php echo $error_msg; ?>");
+        <?php endif; ?>
     </script>
 
     <script async

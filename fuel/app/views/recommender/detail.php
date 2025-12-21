@@ -3,7 +3,7 @@
 <head>   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo e($place->name); ?> - 詳細</title>
+    <title><?php echo e($place->name); ?>Recommender-詳細</title>
     <?php echo Asset::css('detail.css'); ?>
 </head>
 <body>
@@ -148,6 +148,18 @@
 
     </div>
 </div>
+
+<script>
+    //更新成功時のアラート表示
+    <?php if ($success_msg = Session::get_flash('success')): ?>
+        window.alert("<?php echo $success_msg; ?>");
+    <?php endif; ?>
+
+    //削除失敗時のアラート表示
+    <?php if ($error_msg = Session::get_flash('error')): ?>
+        window.alert("<?php echo $error_msg; ?>");
+    <?php endif; ?>
+</script>
 
 </body>
 </html>

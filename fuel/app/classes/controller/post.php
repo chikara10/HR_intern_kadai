@@ -24,38 +24,51 @@ class Controller_Post extends Controller
 
             //バリデーションが成功した場合
             if ($val->run()) {
-                //ログインしているユーザーを取得
-                $current_user_id = \Auth::get('id');
 
-                $place = Model_Place::forge(array(
-                    'name'          => \Input::post('name'),
-                    'place_id'      => \Input::post('place_id'),
-                    'genre_id'      => \Input::post('genre_id'),
-                    'reservable'    => \Input::post('reservable'),
-                    'address'       => \Input::post('address'),
-                    'phone_number'  => \Input::post('phone_number'),
-                    'closing_sun'   => \Input::post('closing_sun', 0),
-                    'closing_mon'   => \Input::post('closing_mon', 0),
-                    'closing_tue'   => \Input::post('closing_tue', 0),
-                    'closing_wed'   => \Input::post('closing_wed', 0),
-                    'closing_thu'   => \Input::post('closing_thu', 0),
-                    'closing_fri'   => \Input::post('closing_fri', 0),
-                    'closing_sat'   => \Input::post('closing_sat', 0),
-                    'closing_hol'   => \Input::post('closing_hol', 0),
-                    'closing_irregular' => \Input::post('closing_irregular', 0),
-                    'website_url'   => \Input::post('website_url'),
-                    'note'          => \Input::post('note'),
-                    'user_id'       => $current_user_id,
-                ));
+                //入力されたplace_idが既に登録されているか確認
+                $input_place_id = \Input::post('place_id');
+                
+                // Model_Placeを使ってデータベースを検索
+                $existing_place = Model_Place::query()
+                    ->where('place_id', $input_place_id)
+                    ->get_one(); // 1件だけ取得
 
-                if ($place && $place->save()) {
-                    // 登録成功
-                    \Session::set_flash('success', '投稿に成功しました。');
-                    // 一覧ページへリダイレクト
-                    \Response::redirect('index');
+                if ($existing_place) {
+                    \Session::set_flash('error', 'その場所はすでに登録されています。');
                 } else {
-                    // 登録失敗
-                    \Session::set_flash('error', '投稿に失敗しました。');
+                    //ログインしているユーザーを取得
+                    $current_user_id = \Auth::get('id');
+
+                    $place = Model_Place::forge(array(
+                        'name'          => \Input::post('name'),
+                        'place_id'      => \Input::post('place_id'),
+                        'genre_id'      => \Input::post('genre_id'),
+                        'reservable'    => \Input::post('reservable'),
+                        'address'       => \Input::post('address'),
+                        'phone_number'  => \Input::post('phone_number'),
+                        'closing_sun'   => \Input::post('closing_sun', 0),
+                        'closing_mon'   => \Input::post('closing_mon', 0),
+                        'closing_tue'   => \Input::post('closing_tue', 0),
+                        'closing_wed'   => \Input::post('closing_wed', 0),
+                        'closing_thu'   => \Input::post('closing_thu', 0),
+                        'closing_fri'   => \Input::post('closing_fri', 0),
+                        'closing_sat'   => \Input::post('closing_sat', 0),
+                        'closing_hol'   => \Input::post('closing_hol', 0),
+                        'closing_irregular' => \Input::post('closing_irregular', 0),
+                        'website_url'   => \Input::post('website_url'),
+                        'note'          => \Input::post('note'),
+                        'user_id'       => $current_user_id,
+                    ));
+
+                    if ($place && $place->save()) {
+                        // 登録成功
+                        \Session::set_flash('success', '投稿に成功しました。');
+                        // 一覧ページへリダイレクト
+                        \Response::redirect('index');
+                    } else {
+                        // 登録失敗
+                        \Session::set_flash('error', '投稿に失敗しました。');
+                    }
                 }
             } else {
                 //バリデーション失敗
@@ -84,7 +97,7 @@ class Controller_Post extends Controller
         $val->add('place_id', 'GMAP_ID')
             ->add_rule('required')
             ->add_rule('max_length', 100)
-            ->set_error_message('required', '候補から選んでください。');
+            ->set_error_message('required', '検索候補から選んでください。');
 
         //ジャンルid
         $val->add('genre_id', 'ジャンル')
@@ -127,19 +140,16 @@ class Controller_Post extends Controller
 
     public function action_delete($id = null)
     {
-        // 1. 指定されたIDの投稿データを探す
         $place = Model_Place::find($id);
 
-        // 2. データが存在するかだけ確認（ユーザーの一致確認はしない）
-        if ($place) {
-            // 3. いきなり削除実行！
-            $place->delete();
+        if ($place && $place->delete()) {
+            //削除成功時
             \Session::set_flash('success', '投稿を削除しました。');
+            \Response::redirect('index');
         } else {
-            \Session::set_flash('error', '削除するデータが見つかりませんでした。');
+            //削除失敗時
+            \Session::set_flash('error', '削除に失敗しました。');
         }
-
-        // 4. 削除したら一覧画面に戻る
-        \Response::redirect('index');
+        
     }
 }

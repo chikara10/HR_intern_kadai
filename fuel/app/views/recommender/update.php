@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>編集 - Recommender</title>
+    <title>Recommender-編集</title>
     <?php echo Asset::css('update.css'); ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
 </head>
@@ -194,14 +194,13 @@
         self.name = ko.observable('');
         self.place_id = ko.observable('');
         self.genre_id = ko.observable('');
-        // ラジオボタン用は文字列として扱う必要があるためString変換に注意
         self.reservable = ko.observable('0'); 
         self.address = ko.observable('');
         self.phone_number = ko.observable('');
         self.website_url = ko.observable('');
         self.note = ko.observable('');
 
-        // 定休日 (Boolean)
+        // 定休日
         self.closing_sun = ko.observable(false);
         self.closing_mon = ko.observable(false);
         self.closing_tue = ko.observable(false);
@@ -220,14 +219,13 @@
                     self.name(data.name);
                     self.place_id(data.place_id);
                     self.genre_id(data.genre_id);
-                    // DBの数値(Int)を文字列(String)にしてラジオボタンとマッチさせる
                     self.reservable(String(data.reservable)); 
                     self.address(data.address);
                     self.phone_number(data.phone_number);
                     self.website_url(data.website_url);
                     self.note(data.note);
 
-                    // 定休日 (DBの 1/0 を true/false に変換)
+                    // 定休日
                     self.closing_sun(data.closing_sun == 1);
                     self.closing_mon(data.closing_mon == 1);
                     self.closing_tue(data.closing_tue == 1);
@@ -243,6 +241,66 @@
     }
 
     ko.applyBindings(new UpdateViewModel());
+
+    window.initAutocomplete = function() {
+        // 入力フィールドを取得
+        const input = document.getElementById("place-input");
+        if (!input) return;
+        
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // 送信をキャンセル
+                return false;
+            }
+        });
+
+        // Autocompleteの初期化
+        const autocomplete = new google.maps.places.Autocomplete(input, {
+            fields: ["place_id", "name", "formatted_address", "formatted_phone_number", "website"],
+            componentRestrictions: { country: "jp" }, // 日本国内に限定
+        });
+
+        // 場所が選択されたときのイベントリスナー
+        autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+
+            // 1. 店舗名の上書き (place.name)
+            if (place.name) {
+                input.value = place.name;
+            }
+
+            // 2. Place ID (place.place_id) -> 隠しフィールドへ
+            if (place.place_id) {
+                document.getElementById("place_id").value = place.place_id;
+            }
+
+            // 3. 住所 (place.formatted_address) -> 自動入力
+            if (place.formatted_address) {
+                // "日本、〒000-0000 "のようなプレフィックスを取り除く簡易処理
+                let address = place.formatted_address.replace(/^日本、/, '');
+                document.getElementById("address").value = address;
+            }
+
+            // 4. 電話番号 (place.formatted_phone_number) -> 自動入力
+            if (place.formatted_phone_number) {
+                document.getElementById("phone_number").value = place.formatted_phone_number;
+            }
+
+            // 5. ウェブサイト (place.website) -> 自動入力
+            if (place.website) {
+                document.getElementById("website_url").value = place.website;
+            }
+        });
+    }
+
+    //既に登録されている場合のアラート表示
+    <?php if ($error_msg = Session::get_flash('error')): ?>
+        window.alert("<?php echo $error_msg; ?>");
+    <?php endif; ?>
+</script>
+
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-nfAbhs2a2motzMwpLRM_KBWCqqHJXFg&libraries=places&callback=initAutocomplete&language=ja">
 </script>
 
 </body>

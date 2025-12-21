@@ -38,15 +38,7 @@ header {
     text-align: center;
 }
 
-/* Recommender タイトル [cite: 1, 7] */
-.app-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    letter-spacing: 0.5px;
-}
-
-/* LOGIN / SIGN UP サブタイトル [cite: 2, 8] */
+/* サブタイトル */
 .page-subtitle {
     font-size: 20px;
     font-weight: bold;
@@ -70,7 +62,7 @@ header {
     margin-bottom: 5px;
 }
 
-/* 入力欄（下線のみ） */
+/* 入力欄 */
 .form-input {
     width: 100%;
     padding: 8px 0;
@@ -91,7 +83,7 @@ header {
     margin-top: 40px;
 }
 
-/* グレーのボタン [cite: 5, 11] */
+/* グレーのボタン */
 .submit-btn {
     background-color: #999;
     color: white;
@@ -109,7 +101,7 @@ header {
     background-color: #777;
 }
 
-/* リンク [cite: 6] */
+/* リンク */
 .auth-link {
     display: block;
     margin-top: 20px;

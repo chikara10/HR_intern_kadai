@@ -91,7 +91,7 @@
         var apiUrl = "<?php echo Uri::create('api/search.json'); ?>";
         var detailBaseUrl = "<?php echo Uri::create('detail/index/'); ?>";
 
-        // 検索実行関数 (Ajax)
+        // 検索実行関数
         self.search = function() {
             // パラメータ作成
             var params = new URLSearchParams();
@@ -108,7 +108,6 @@
                     return response.json();
                 })
                 .then(data => {
-                    // 【修正点1】データが配列でない、またはnullの場合は空にする
                     if (!data || !Array.isArray(data)) {
                         self.places([]); 
                         return;
@@ -123,8 +122,6 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // 【修正点2】エラーが発生した場合（0件でAPIが特殊な応答をした場合など）も
-                    // リストを空にして「見つかりませんでした」を表示させる
                     self.places([]); 
                 });
         };
@@ -132,7 +129,7 @@
         // フィルタ切り替え関数
         self.setFilter = function(value) {
             self.selectedReservable(value);
-            self.search(); // 変更したら即検索
+            self.search(); 
         };
 
         // 表示用ヘルパー関数：予約ステータスの文字
@@ -153,6 +150,11 @@
 
     // バインディングの適用
     ko.applyBindings(new AppViewModel());
+
+    //投稿成功時、削除成功時のアラート表示
+    <?php if ($success_msg = Session::get_flash('success')): ?>
+        window.alert("<?php echo $success_msg; ?>");
+    <?php endif; ?>
 </script>
 
 </body>
