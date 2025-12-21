@@ -9,6 +9,12 @@
 </head>
 <body>
 
+    <div class="header-right">
+        <?php if (Auth::check()): ?>
+            <a href="<?php echo Uri::create('login/logout'); ?>" class="logout-btn">ログアウト</a>
+        <?php endif; ?>
+    </div>
+
     <header>
         <a href="<?php echo Uri::create('index'); ?>">
             <?php echo Asset::img('main-icon.png', [

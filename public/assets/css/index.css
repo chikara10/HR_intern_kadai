@@ -7,6 +7,24 @@ body {
     color: #333;
 }
 
+.header-right {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    z-index: 200;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.logout-btn {
+    color: #333;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    text-decoration: underline;
+}
+
 header {
     background-color: #f9f9f9;
     padding: 15px 10px;
@@ -113,6 +131,7 @@ header {
 
 .place-info {
     flex: 1;
+    width: 100%;
 }
 
 .place-genre {
@@ -146,10 +165,10 @@ header {
 }
 
 /* PDFのイメージに合わせた色分け */
-.status-ok { color: #d9534f; border-color: #d9534f; background: #fff5f5; } /* 予約可 */
-.status-free { color: #5bc0de; border-color: #5bc0de; background: #f0fbff; } /* 予約不要 */
-.status-ng { color: #777; border-color: #777; background: #f9f9f9; } /* 予約不可 */
-.status-hard { color: #f0ad4e; border-color: #f0ad4e; background: #fffcf0; } /* 予約難 */
+.status-ok { color: #2bcb70; border-color: #2bcb70; background: #f1f6f2; } /* 予約可 */
+.status-free { color: #f0ad4e; border-color: #f0ad4e; background: #fffcf0; } /* 予約不要 */
+.status-ng { color: #d9534f; border-color: #d9534f; background: #fff5f5;  } /* 予約不可 */
+.status-hard { color: #777; border-color: #777; background: #f9f9f9; } /* 予約難 */
 
 
 /* 右下の＋ボタン (FAB) */

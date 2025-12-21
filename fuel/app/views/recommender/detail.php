@@ -8,6 +8,14 @@
 </head>
 <body>
 
+<div class="header-right">
+    <?php if (Auth::check()): ?>
+        <a href="<?php echo Uri::create('login/logout'); ?>" class="logout-btn">ログアウト</a>
+    <?php else: ?>
+        <a href="<?php echo Uri::create('login'); ?>" class="logout-btn">ログイン</a>
+    <?php endif; ?>
+</div>
+
 <header>
     <a href="<?php echo Uri::create('index'); ?>">
         <?php echo Asset::img('main-icon.png', [
@@ -29,10 +37,15 @@
                         'alt'   => 'update'
                     ]);?>
                 </a>
-                <?php echo Asset::img('delete-icon.svg', [
-                    'class' => 'delete-icon',
-                    'alt'   => 'delete'
-                ]);?>
+
+                <a href="<?php echo Uri::create('post/delete/'.$place->id); ?>" 
+                    class="btn-delete-link"
+                    onclick="return confirm('本当にこの投稿を削除しますか?');">
+                    <?php echo Asset::img('delete-icon.svg', [
+                        'class' => 'delete-icon',
+                        'alt'   => 'delete'
+                    ]);?>
+                </a>
             </div>
         </div>
 
@@ -43,7 +56,7 @@
             <?php if ($place->reservable == 0): ?>
                 <span class="reservable-badge res-ok">予約可</span>
             <?php elseif ($place->reservable == 1): ?>
-                <span class="reservable-badge res-ng">予約不用</span>
+                <span class="reservable-badge res-ng">予約不要</span>
             <?php elseif ($place->reservable == 2): ?>
                 <span class="reservable-badge res-unk">予約不可</span>
             <?php elseif ($place->reservable == 3): ?>

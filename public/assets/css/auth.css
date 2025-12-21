@@ -1,19 +1,32 @@
-/* --- auth.css --- */
+/* 共通スタイル */
 body {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 0;
+    background-color: #f9f9f9;
     color: #333;
+}
+
+header {
+    background-color: #f9f9f9;
+    padding: 15px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+}
+
+.app-title {
+    margin: 0;
+    width: 200px;
 }
 
 .auth-container {
     width: 100%;
     max-width: 400px;
     padding: 20px;
+    margin: 0px auto;
 }
 
 /* カードデザイン */
@@ -35,7 +48,7 @@ body {
 
 /* LOGIN / SIGN UP サブタイトル [cite: 2, 8] */
 .page-subtitle {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
     color: #333;
     margin-bottom: 40px;

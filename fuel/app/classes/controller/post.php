@@ -124,4 +124,22 @@ class Controller_Post extends Controller
 
         return $val;
     }
+
+    public function action_delete($id = null)
+    {
+        // 1. 指定されたIDの投稿データを探す
+        $place = Model_Place::find($id);
+
+        // 2. データが存在するかだけ確認（ユーザーの一致確認はしない）
+        if ($place) {
+            // 3. いきなり削除実行！
+            $place->delete();
+            \Session::set_flash('success', '投稿を削除しました。');
+        } else {
+            \Session::set_flash('error', '削除するデータが見つかりませんでした。');
+        }
+
+        // 4. 削除したら一覧画面に戻る
+        \Response::redirect('index');
+    }
 }

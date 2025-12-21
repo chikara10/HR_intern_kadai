@@ -8,8 +8,16 @@
 </head>
 <body>
 
+<header>
+    <a href="<?php echo Uri::create('index'); ?>">
+        <?php echo Asset::img('main-icon.png', [
+            'class' => 'app-title',
+            'alt'   => 'Recommender'
+        ]);?>
+    </a>
+</header>
+
 <div class="auth-container">
-    <h1 class="app-title">Recommender</h1>
     
     <div class="auth-card">
         <div class="page-subtitle">SIGN UP</div>
