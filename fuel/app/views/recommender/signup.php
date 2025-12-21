@@ -39,12 +39,12 @@
 
             <div class="form-group">
                 <label>ユーザー名</label>
-                <input type="text" name="username" class="form-input" required>
+                <input type="text" name="username" class="form-input">
             </div>
 
             <div class="form-group">
                 <label>パスワード</label>
-                <input type="password" name="password" class="form-input" required>
+                <input type="password" name="password" class="form-input">
             </div>
 
             <div class="submit-area">

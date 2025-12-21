@@ -33,12 +33,12 @@
 
             <div class="form-group">
                 <label>ユーザー名</label>
-                <input type="text" name="username" class="form-input" placeholder="" required>
+                <input type="text" name="username" class="form-input" placeholder="">
             </div>
 
             <div class="form-group">
                 <label>パスワード</label>
-                <input type="password" name="password" class="form-input" placeholder="" required>
+                <input type="password" name="password" class="form-input" placeholder="">
             </div>
 
             <div class="submit-area">
