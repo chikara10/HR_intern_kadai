@@ -35,6 +35,7 @@
         <?php endif; ?>
 
         <form action="" method="post" class="post-form">
+            <?php echo Form::csrf(); ?>
 
             <div class="form-group">
                 <label for="place-input">店舗名/場所名 <span class="required">※</span>

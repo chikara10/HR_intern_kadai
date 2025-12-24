@@ -19,6 +19,12 @@ class Controller_Post extends Controller
         //フォームが送信された場合
         if (\Input::method() == 'POST') {
 
+            //  CSRFチェック
+            if (! \Security::check_token()) {
+                \Session::set_flash('error', '正規の画面から投稿してください。');
+                \Response::redirect('post');
+            }
+
             //バリデーションを実行
             $val = $this->create_validation();
 
@@ -39,7 +45,7 @@ class Controller_Post extends Controller
                     //ログインしているユーザーを取得
                     $current_user_id = \Auth::get('id');
 
-                    $place = Model_Place::forge(array(
+                    $place = array(
                         'name'          => \Input::post('name'),
                         'place_id'      => \Input::post('place_id'),
                         'genre_id'      => \Input::post('genre_id'),
@@ -58,20 +64,30 @@ class Controller_Post extends Controller
                         'website_url'   => \Input::post('website_url'),
                         'note'          => \Input::post('note'),
                         'user_id'       => $current_user_id,
-                    ));
+                        'created_at'    => time(), 
+                        'updated_at'    => time(),
+                    );
 
-                    if ($place && $place->save()) {
-                        // 登録成功
-                        \Session::set_flash('success', '投稿に成功しました。');
-                        // 一覧ページへリダイレクト
-                        \Response::redirect('index');
-                    } else {
-                        // 登録失敗
-                        \Session::set_flash('error', '投稿に失敗しました。');
+                    try {
+                        list($insert_id, $rows_affected) = \DB::insert('places')->set($place)->execute();
+                        
+                        if ($rows_affected > 0) {
+                            // 登録成功
+                            \Session::set_flash('success', '投稿に成功しました。');
+                            // 一覧ページへリダイレクト
+                            \Response::redirect('index');
+                        } else {
+                            // 登録失敗
+                            \Session::set_flash('error', '投稿に失敗しました。');
+                        }
+                    } catch (\Exception $e) {
+                        // エラー発生時
+                        \Session::set_flash('error', 'システムエラーが発生しました。');
                     }
                 }
+
             } else {
-                //バリデーション失敗
+                // バリデーション失敗
                 \Session::set_flash('error', $val->error());
             }
         }

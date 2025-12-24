@@ -19,13 +19,20 @@ class Controller_Update extends Controller
         }
 
         // データの存在確認
-        $place = Model_Place::find($id);
+        $place = DB::select()->from('places')->where('id', $id)->execute()->current();
+
         if (!$place) {
             Response::redirect('index');
         }
 
         // フォームが送信された場合 (更新処理)
         if (Input::method() == 'POST') {
+
+            //CSRF対策
+            if (!Security::check_token()) {
+                Session::set_flash('error', '正規の画面から送信してください。');
+                Response::redirect('detail/index/' . $id);
+            }
             
             $val = Validation::forge();
 
@@ -83,41 +90,52 @@ class Controller_Update extends Controller
                 //入力されたplace_idが既に登録されているか確認
                 $input_place_id = \Input::post('place_id');
                 
-                // Model_Placeを使ってデータベースを検索
-                $existing_place = Model_Place::query()
+                // 自分以外のIDで、同じplace_idを持つデータがあるか確認
+                $existing_place = DB::select('id')
+                    ->from('places')
                     ->where('place_id', $input_place_id)
                     ->where('id', '!=', $id) // 自分自身は除外
-                    ->get_one(); // 1件だけ取得
+                    ->execute()
+                    ->current();
 
                 if ($existing_place) {
                     \Session::set_flash('error', 'その場所はすでに登録されています。');
                 } else {
 
                     // データの更新
-                    $place->name = Input::post('name');
-                    $place->place_id = Input::post('place_id');
-                    $place->genre_id = Input::post('genre_id');
-                    $place->reservable = Input::post('reservable');
-                    $place->address = Input::post('address');
-                    $place->phone_number = Input::post('phone_number');
-                    $place->website_url = Input::post('website_url');
-                    $place->note = Input::post('note');
+                    $data = array(
+                        'name'              => Input::post('name'),
+                        'place_id'          => Input::post('place_id'),
+                        'genre_id'          => Input::post('genre_id'),
+                        'reservable'        => Input::post('reservable'),
+                        'address'           => Input::post('address'),
+                        'phone_number'      => Input::post('phone_number'),
+                        'website_url'       => Input::post('website_url'),
+                        'note'              => Input::post('note'),
+                        'updated_at'        => time(), // 更新日時を手動でセット
+                        
+                        // 定休日 (チェックがない場合は0になるように処理)
+                        'closing_sun'       => Input::post('closing_sun', 0) ? 1 : 0,
+                        'closing_mon'       => Input::post('closing_mon', 0) ? 1 : 0,
+                        'closing_tue'       => Input::post('closing_tue', 0) ? 1 : 0,
+                        'closing_wed'       => Input::post('closing_wed', 0) ? 1 : 0,
+                        'closing_thu'       => Input::post('closing_thu', 0) ? 1 : 0,
+                        'closing_fri'       => Input::post('closing_fri', 0) ? 1 : 0,
+                        'closing_sat'       => Input::post('closing_sat', 0) ? 1 : 0,
+                        'closing_hol'       => Input::post('closing_hol', 0) ? 1 : 0,
+                        'closing_irregular' => Input::post('closing_irregular', 0) ? 1 : 0,
+                    );
 
-                    // 定休日 (チェックがない場合は0になるように処理)
-                    $place->closing_sun = Input::post('closing_sun', 0) ? 1 : 0;
-                    $place->closing_mon = Input::post('closing_mon', 0) ? 1 : 0;
-                    $place->closing_tue = Input::post('closing_tue', 0) ? 1 : 0;
-                    $place->closing_wed = Input::post('closing_wed', 0) ? 1 : 0;
-                    $place->closing_thu = Input::post('closing_thu', 0) ? 1 : 0;
-                    $place->closing_fri = Input::post('closing_fri', 0) ? 1 : 0;
-                    $place->closing_sat = Input::post('closing_sat', 0) ? 1 : 0;
-                    $place->closing_hol = Input::post('closing_hol', 0) ? 1 : 0;
-                    $place->closing_irregular = Input::post('closing_irregular', 0) ? 1 : 0;
+                    try {
+                        DB::update('places')
+                            ->set($data)
+                            ->where('id', $id)
+                            ->execute();
 
-                    if ($place->save()) {
                         Session::set_flash('success', '情報を更新しました。');
                         Response::redirect('detail/index/' . $id);
-                    } else {
+
+                    } catch (Exception $e) {
                         Session::set_flash('error', '更新に失敗しました。');
                     }
                 }
@@ -127,6 +145,7 @@ class Controller_Update extends Controller
         }
 
         // ビューの表示
+        $data['place'] = $place;
         $data['place_id'] = $id; // JSでAPIを叩くためにIDを渡す
         $data['genres'] = Model_Genre::find('all'); // セレクトボックス用
         return View::forge('recommender/update', $data);
